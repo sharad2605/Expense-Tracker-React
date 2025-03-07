@@ -2,20 +2,48 @@ import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 
+
 const Profile = () => {
   const [fullName, setFullName] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const { token } = useContext(AuthContext);
+
+  const verifyEmailHandler = async() => {
+    try{
+      const res =  await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${import.meta.env.VITE_APP_KEY}`,{
+        method: "POST", 
+        body: JSON.stringify({
+          requestType: "VERIFY_EMAIL",
+          idToken: token  
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          'X-Firebase-Locale': 'en' // Set the language to English
+        },
+      }
+    )
+    if (!response.ok) {
+      throw new Error('request failed');
+  }
+  const data = await response.json();
+  console.log(data);
+  alert('Code sent on email kindly check');
+  return data
+} catch (error) {
+  console.log(error);
+  throw error;
+}
+      
+  };
 
   
 
   useEffect(() => {
     const idToken = localStorage.getItem("token");
 
-    if (!idToken) {
-      navigate("/authform");
-    }
+    
     const fetchProfile = async () => {
       try {
         const response = await fetch(
@@ -29,12 +57,13 @@ const Profile = () => {
           }
         );
 
-        if (!response.ok) throw new Error("Failed to fetch profile!");
+        
 
         const data = await response.json();
         if (data.users.length > 0) {
           setFullName(data.users[0].displayName || "");
           setPhotoUrl(data.users[0].photoUrl || "");
+          setEmail(data.users[0].email || "");
         }
       } catch (error) {
         console.error(error.message);
@@ -87,6 +116,7 @@ const Profile = () => {
 
   return (
     <>
+  
     <h1 className="text-center">Welcome to your Profile ...!!!</h1>
 
     <div className="d-flex justify-content-center align-items-center vh-100 vw-100 bg-light">
@@ -103,6 +133,17 @@ const Profile = () => {
               required
             />
           </div>
+          <div>
+          
+          {photoUrl && (
+    <img
+      src={photoUrl}
+      className="profile-pic"
+      alt="Profile"
+      style={{ width: "150px", height: "150px", borderRadius: "50%", objectFit: "cover" }}
+    />
+  )}
+          </div>
           <div className="mb-3">
             <label className="form-label">Profile Photo URL:</label>
             <input
@@ -113,12 +154,39 @@ const Profile = () => {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100">
-            Update
-          </button>
-          <br />
-          <br />
-          <button type="button" className="btn btn-outline-danger w-100"  onClick={() => navigate("/home")}>Cancel</button>
+          <div>
+            <label className="form-label">Email:</label>
+            <div className="container">
+  <div className="row mt-4">
+    <div className="col-md-8">
+      <input
+        type="text"
+        style={{ backgroundColor: "grey" }}
+        value={email}
+        readOnly
+        className="form-control"
+      />
+    </div>
+    <div className="col-md-4">
+      <button type="button" onClick={verifyEmailHandler} className="btn btn-success w-100">Verify Email</button>
+    </div>
+  </div>
+</div>
+
+            
+          </div>
+          <div className="container">
+    <div className="row mt-4">
+    <div className="col-md-6">
+      <button type="submit" className="btn btn-primary w-100" disabled={!fullName || !photoUrl}>Update</button>
+    </div>
+    <div className="col-md-6">
+      <button className="btn btn-outline-danger w-100" onClick={() => navigate("/home")}>Cancel</button>
+    </div>
+  </div>
+</div>
+
+         
         </form>
       </div>
     </div>

@@ -15,6 +15,11 @@ const Authform = () => {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate()
   
+  const reset = function() {
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+  }
 
   const handleAuth = (e) => {
     e.preventDefault();
@@ -47,9 +52,14 @@ const Authform = () => {
         console.log(isLogin ? "User logged in!" : "User signed up!");
         console.log(authCtx)
         authCtx.login(data.idToken);  
-        navigate("/home");
-        // Redirect after login/signup
-       
+        if(!isLogin)
+          {
+            alert("Account created successfully,Now Login to continue");
+          }  
+        //reset the form
+        reset();
+        {isLogin && navigate("/home")};
+      
       })
       .catch((err) => {
         alert(err.message);
