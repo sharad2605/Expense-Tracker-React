@@ -1,10 +1,50 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import AuthContext from "../../store/auth-context";
 
 const Profile = () => {
   const [fullName, setFullName] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
   const navigate = useNavigate();
+  const { token } = useContext(AuthContext);
+
+  
+
+  useEffect(() => {
+    const idToken = localStorage.getItem("token");
+
+    if (!idToken) {
+      navigate("/authform");
+    }
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch(
+          `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${import.meta.env.VITE_APP_KEY}`,
+          {
+            method: "POST",
+            body: JSON.stringify({ 
+              idToken: idToken
+             }),
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+
+        if (!response.ok) throw new Error("Failed to fetch profile!");
+
+        const data = await response.json();
+        if (data.users.length > 0) {
+          setFullName(data.users[0].displayName || "");
+          setPhotoUrl(data.users[0].photoUrl || "");
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
+    if (idToken) fetchProfile();
+  }, []);
+
+
 
   const updateProfileHandler = async (e) => {
     e.preventDefault();
@@ -46,6 +86,9 @@ const Profile = () => {
   };
 
   return (
+    <>
+    <h1 className="text-center">Welcome to your Profile ...!!!</h1>
+
     <div className="d-flex justify-content-center align-items-center vh-100 vw-100 bg-light">
       <div className="card p-4 shadow" style={{ width: "400px" }}>
         <h2 className="text-center">Contact Details</h2>
@@ -75,10 +118,11 @@ const Profile = () => {
           </button>
           <br />
           <br />
-          <button className="btn btn-outline-danger w-100"  onClick={() => navigate("/home")}>Cancel</button>
+          <button type="button" className="btn btn-outline-danger w-100"  onClick={() => navigate("/home")}>Cancel</button>
         </form>
       </div>
     </div>
+    </>
   );
 };
 

@@ -7,7 +7,7 @@ const Home = () => {
 
   return (
     <>
-      <h1>Welcome to Expense Tracker</h1>
+      <h1 className="text-center"> Welcome to Expense Tracker</h1>
       {authCtx.isLoggedIn && (
         <p>
           Your Profile is incomplete.{" "}
