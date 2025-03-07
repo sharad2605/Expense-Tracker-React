@@ -19,7 +19,7 @@ export const AuthContextProvider = (props) => {
     const userIsLoggedIn = !!token;
 
     const loginHandler = (token) => { 
-        const expiresAt = Date.now() + 5 * 60 * 1000; // Token expires in 5 minutes
+        const expiresAt = Date.now() + 100 * 60 * 1000; // Token expires in 5 minutes
         setToken(token);
         localStorage.setItem('token', token);
         localStorage.setItem('expiresAt', expiresAt);
