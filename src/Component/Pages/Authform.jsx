@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { Button } from "react-bootstrap";
 import { useContext } from "react";
 import AuthContext from "../../store/auth-context";  
 import { useNavigate } from "react-router-dom";
@@ -105,14 +105,21 @@ const Authform = () => {
             </div>
           )}
 
-          <button type="submit" className="btn btn-primary w-100">
+          <Button type="submit" variant="warning"  className="btn btn-primary w-100">
             {isLogin ? "Login" : "Sign Up"}
-          </button>
+          </Button>
         </form>
+        <br />
+        <button variant="Warning"
+            className="btn btn-link"
+            onClick={() => navigate("/forget-password")}
+          >
+            {isLogin && "Forget Password?"}
+          </button>
 
         <p className="text-center mt-3">
           {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-          <button
+          <button variant="Warning"
             className="btn btn-link"
             onClick={() => setIsLogin((prev) => !prev)}
           >

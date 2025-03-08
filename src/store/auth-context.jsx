@@ -10,41 +10,41 @@ const AuthContext = React.createContext({
 export const AuthContextProvider = (props) => {
     
     const storedToken = localStorage.getItem('token');
-    const storedExpiry = localStorage.getItem('expiresAt');
-    const currentTime = Date.now();
+    // const storedExpiry = localStorage.getItem('expiresAt');
+    // const currentTime = Date.now();
 
-    const isTokenValid = storedToken && storedExpiry && currentTime < storedExpiry;
-    const [token, setToken] = useState(isTokenValid ? storedToken : null);
+    // const isTokenValid = storedToken && storedExpiry && currentTime < storedExpiry;
+    const [token, setToken] = useState(storedToken);///changes here
 
     const userIsLoggedIn = !!token;
 
     const loginHandler = (token) => { 
-        const expiresAt = Date.now() + 100 * 60 * 1000; // Token expires in 5 minutes
+        // const expiresAt = Date.now() + 100 * 60 * 1000; // Token expires in 5 minutes
         setToken(token);
         localStorage.setItem('token', token);
-        localStorage.setItem('expiresAt', expiresAt);
+        // localStorage.setItem('expiresAt', expiresAt);
         
 
         // Auto logout after 5 minutes
-        setTimeout(logoutHandler, expiresAt - Date.now());
+        // setTimeout(logoutHandler, expiresAt - Date.now());
     };  
 
     const logoutHandler = () => {    
         setToken(null);
         localStorage.removeItem('token');
-        localStorage.removeItem('expiresAt');
-        alert("Session expired. Please log in again.");
+        // localStorage.removeItem('expiresAt');
+        // alert("Session expired. Please log in again.");
     };  
 
     // Auto logout if the token is expired when the page loads
-    useEffect(() => {
-        if (!isTokenValid) {
-            logoutHandler();
-        } else {
-            const remainingTime = storedExpiry - Date.now();
-            setTimeout(logoutHandler, remainingTime);
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (!isTokenValid) {
+    //         logoutHandler();
+    //     } else {
+    //         const remainingTime = storedExpiry - Date.now();
+    //         setTimeout(logoutHandler, remainingTime);
+    //     }
+    // }, []);
 
     const contextValue = {  
         token: token,

@@ -21,7 +21,7 @@ const Header = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Link to="/about" className="nav-link text-white">About</Link>
+            {/* <Link to="/about" className="nav-link text-white">About</Link> */}
             {authCtx.isLoggedIn && (
               <Link to="/profile" className="nav-link text-white">Profile</Link>
             )}

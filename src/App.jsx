@@ -7,6 +7,8 @@
   import AuthContext from "./store/auth-context"; 
   import Header from "./Component/Header/Header";
   import Welcome from "./Component/Pages/Welcome";
+  import "bootstrap/dist/css/bootstrap.min.css";
+  import ForgetPassword from "./Component/Pages/ForgetPassword";
   
   function App() {
     return (
@@ -18,6 +20,7 @@
             <Route path="/auth" element={<AuthForm />} />
             <Route path="/home" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/forget-password" element={<ForgetPassword />} />
           </Routes>
         </Router>
      
