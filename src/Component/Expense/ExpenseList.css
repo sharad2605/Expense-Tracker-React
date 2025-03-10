@@ -1,0 +1,39 @@
+.expense-list {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
+}
+
+.expense-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-radius: 10px;
+    background: #f4f47f;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.expense-item:hover {
+    transform: scale(1.02);
+}
+
+.expense-category {
+    font-weight: bold;
+    color: #333;
+}
+
+.expense-description {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.expense-amount {
+    font-weight: bold;
+    color: #ff9800;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: #fff3cd;
+}

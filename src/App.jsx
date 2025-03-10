@@ -9,8 +9,10 @@
   import Welcome from "./Component/Pages/Welcome";
   import "bootstrap/dist/css/bootstrap.min.css";
   import ForgetPassword from "./Component/Pages/ForgetPassword";
+  import AddExpense from "./Component/Expense/AddExpense";
   
   function App() {
+    const authCtx = React.useContext(AuthContext);
     return (
       
         <Router>
@@ -21,6 +23,7 @@
             <Route path="/home" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/forget-password" element={<ForgetPassword />} />
+            <Route path="/add-expense" element={<AddExpense />}/>
           </Routes>
         </Router>
      
