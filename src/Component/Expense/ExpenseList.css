@@ -37,3 +37,23 @@
     border-radius: 5px;
     background: #fff3cd;
 }
+
+.edit-button {
+    margin-right: 10px;
+    background: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-button {
+    margin-left: 10px;
+    background: #f44336;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
