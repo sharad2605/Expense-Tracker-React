@@ -59,3 +59,60 @@
 
 }
 
+.premium-btn{
+    background: linear-gradient(90deg, #ffcc00, #ff8800);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(17, 6, 168, 0.2);
+  transition: all 0.3s ease-in-out;
+  margin-bottom: 1rem;
+}
+
+.premium-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .premium-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 4px rgba(227, 8, 8, 0.2);
+  }
+
+  .light-theme {
+    background: white;
+    color: black;
+  }
+  
+  .dark-theme {
+    background: #121212;
+    color: white;
+  }
+  .toggle-btn {
+    background: #444;
+    color: white;
+    border-radius: 5px;
+  }
+  
+  .toggle-btn:hover {
+    background: #666;
+  }
+
+  .download-csv-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.download-csv-btn:hover {
+    background-color: #45a049;
+}

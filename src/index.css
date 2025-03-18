@@ -12,7 +12,22 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+body.dark-mode {
+  background-color: #121212;
+  color: white;
+}
 
+body.light-mode {
+  background-color: white;
+  color: black;
+}
+.dark-mode .total-amount {
+  color: white; /* Dark mode mein white text */
+}
+
+.light-mode .total-amount {
+  color: black; /* Light mode mein black text */
+}
 a {
   font-weight: 500;
   color: #646cff;

@@ -1,4 +1,4 @@
-
+  import { useEffect } from "react";
   import React from "react";
   import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
   import AuthForm from "./Component/Pages/Authform";
@@ -10,12 +10,19 @@
   import "bootstrap/dist/css/bootstrap.min.css";
   import ForgetPassword from "./Component/Pages/ForgetPassword";
   import AddExpense from "./Component/Expense/AddExpense";
+  import { useSelector } from "react-redux";
   
   function App() {
-    const authCtx = React.useContext(AuthContext);
+
+    const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
+
+    useEffect(() => {
+      document.body.className = isDarkMode ? "dark-mode" : "light-mode";
+    }, [isDarkMode]);
     return (
       
         <Router>
+           <div className={isDarkMode ? "dark-mode" : "light-mode"}>
           <Header />
           <Routes>
             <Route path="/" element={<Welcome />} />
@@ -25,6 +32,7 @@
             <Route path="/forget-password" element={<ForgetPassword />} />
             <Route path="/add-expense" element={<AddExpense />}/>
           </Routes>
+          </div>
         </Router>
      
     );
