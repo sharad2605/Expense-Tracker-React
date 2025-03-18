@@ -1,38 +1,41 @@
-import { Button } from "react-bootstrap";
-import "./ExpenseList.css";
+import { useSelector, useDispatch } from "react-redux";
+import  {expensesActions } from "../../store/expenseSlice";
+import './ExpenseList.css';
 
+const ExpenseList = ({ onEditExpense ,onDeleteExpense }) => {
+    const dispatch = useDispatch();
+    const expenses = useSelector((state) => state.expense.expenses);
 
-const ExpenseList = ({ expenses, onEditExpense, onDeleteExpense }) => {
-    if (expenses.length === 0) {
+    
+
+    if (!expenses || expenses.length === 0) {
         return <p>No expenses found.</p>;
     }
+
     
-    const handleEditExpense = (expenseId) => {
-        // Handle edit expense logic here
-        console.log(`Edit expense with ID: ${expenseId}`);
-    };
-
-    const handleDeleteExpense = (expenseId) => {
-        // Handle delete expense logic here
-    };
-
     return (
         <div className="expense-list">
-    {expenses.map((expense, index) => (
-        <div key={index} className="expense-item">
-            <div>
-                <span className="expense-category">{expense.category}</span>
-                <div className="expense-description">{expense.description}</div>
-            </div>
-            <span className="expense-amount">₹{expense.moneySpent}</span>
-            <div>
-            <button onClick={() => onEditExpense(expense.id)} className="edit-button">Edit</button>
-            <button  onClick={() => onDeleteExpense(expense.id)} className="delete-button">Delete</button>
-            </div>
+            {expenses.map((expense) => (
+                <div key={expense.id} className="expense-item">
+                    <div>
+                        <span className="expense-category">{expense.category}</span>
+                        <div className="expense-description">{expense.description}</div>
+                    </div>
+                    <span className="expense-amount">₹{expense.moneySpent}</span>
+                    <div>
+                        <button onClick={() => onEditExpense(expense)} className="edit-button">
+                            Edit
+                        </button>
+                        <button
+                            onClick={() => onDeleteExpense(expense.id)}
+                            className="delete-button"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            ))}
         </div>
-    ))}
-</div>
-
     );
 };
 

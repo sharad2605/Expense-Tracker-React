@@ -1,19 +1,31 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
-import { useContext } from "react";
-import AuthContext from "../../store/auth-context";  
+// import { useContext } from "react";
+// import AuthContext from "../../store/auth-context";  
 import { useNavigate } from "react-router-dom";
 import Home from "../Home/Home";
+import {authActions } from "../../store/authSlice";
+import { useDispatch } from 'react-redux';
+import { useSelector } from "react-redux";
+
 
 
 
 const Authform = () => {
-  const authCtx = useContext(AuthContext);
+  // const authCtx = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate()
+  const dispatch = useDispatch();
+
+  const token = useSelector((state) => state.auth.token);
+
+console.log("Redux Token after Login:", token);
+  
+
+  
   
   const reset = function() {
     setEmail("");
@@ -50,8 +62,10 @@ const Authform = () => {
           throw new Error(data.error.message);
         }
         console.log(isLogin ? "User logged in!" : "User signed up!");
-        console.log(authCtx)
-        authCtx.login(data.idToken);  
+        
+        dispatch(authActions.login({ token: data.idToken, email: data.email }));
+        console.log("Token received:", data.idToken);
+        console.log("Dispatched Login Action:", { token: data.idToken, email: data.email });
         if(!isLogin)
           {
             alert("Account created successfully,Now Login to continue");

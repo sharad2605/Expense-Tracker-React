@@ -3,9 +3,15 @@ import { Button, Form, FloatingLabel } from "react-bootstrap";
 import ExpenseList from "../Expense/ExpenseList";
 import AuthContext from "../../store/auth-context";
 // import Home from "../Home/Home";
+import { useDispatch, useSelector } from 'react-redux';
+import { expensesActions } from "../../store/expenseSlice";
 
 const AddExpense = () => {
-    const { isLoggedIn } = useContext(AuthContext);
+    const dispatch=useDispatch();
+    const expenseItem = useSelector((state) => state.expense.expenses);
+    
+    const isPremiumActive = useSelector((state) => state.premium.isPremiumActive);
+    
     const [moneySpent, setMoneySpent] = useState("");
     const [description, setDescription] = useState("");
     const [category, setCategory] = useState("Select");
@@ -20,6 +26,9 @@ const AddExpense = () => {
 
     // 🔥 Fetch expenses from Firebase on component mount
     useEffect(() => {
+
+       
+
         const fetchExpenses = async () => {
             try {
                 const response = await fetch(
@@ -37,14 +46,15 @@ const AddExpense = () => {
                     loadedExpenses.push({ id: key, ...data[key] });
                 }
 
-                setExpenses(loadedExpenses);
+                dispatch(expensesActions.setExpenses(loadedExpenses));
+                console.log("Expenses fetched:", loadedExpenses); 
             } catch (error) {
                 console.error("Error fetching expenses:", error);
             }
         };
 
         fetchExpenses();
-    }, []);
+    }, [dispatch]);
 
     // 🔥 Add new expense
     const addExpenseHandler = async (e) => {
@@ -70,11 +80,7 @@ const AddExpense = () => {
                 }
     
                 // ✅ Existing expense ko update kar do
-                setExpenses((prevExpenses) =>
-                    prevExpenses.map((exp) =>
-                        exp.id === editingExpense.id ? { id: exp.id, ...newExpense } : exp
-                    )
-                );
+                dispatch(expensesActions.updateExpense({ id: editingExpense.id, ...newExpense }));
             } else {
                 // 🔥 Agar `editingExpense` null hai, toh naya expense add karna hai
                 response = await fetch(
@@ -87,7 +93,7 @@ const AddExpense = () => {
                 );
     
                 const data = await response.json();
-                setExpenses((prevExpenses) => [...prevExpenses, { id: data.name, ...newExpense }]);
+                dispatch(expensesActions.addExpense({ id: data.name, ...newExpense }));
             }
     
             // ✅ Form reset kar do
@@ -104,26 +110,24 @@ const AddExpense = () => {
     };
     
 
-    const editExpenseHandler = (expenseId) => {
-        console.log(`Edit expense with ID: ${expenseId}`);
+    const editExpenseHandler = (expense) => {
+        console.log(`Edit expense with ID: ${expense}`);
         
-        const expenseToEdit = expenses.find((expense) => expense.id === expenseId);
-        
-        if (!expenseToEdit) return;
     
         // ✅ Input fields ko prefill karo
-        setMoneySpent(expenseToEdit.moneySpent);
-        setDescription(expenseToEdit.description);
-        setCategory(expenseToEdit.category);
+        setMoneySpent(expense.moneySpent);
+        setDescription(expense.description);
+        setCategory(expense.category);
     
         // ✅ Edit mode enable karo
-        setEditingExpense(expenseToEdit);
+        setEditingExpense(expense);
     
         // ✅ Form open karo
         setShowForm(true);
     };
     
     const deleteExpenseHandler = async (expenseId) => {
+        console.log("🗑️ Deleting Expense ID:", expenseId); 
         const confirmDelete = window.confirm("Are you sure you want to delete this expense?");
         if (!confirmDelete) return;
     
@@ -138,9 +142,11 @@ const AddExpense = () => {
             if (!response.ok) {
                 throw new Error("Failed to delete expense!");
             }
+
+            console.log("✅ Expense deleted successfully from Firebase");
     
             // ✅ Delete hone ke baad state update karo
-            setExpenses((prevExpenses) => prevExpenses.filter(exp => exp.id !== expenseId));
+            dispatch(expensesActions.deleteExpense(expenseId));
     
             alert("Expense deleted successfully!");
         } catch (error) {
@@ -149,9 +155,9 @@ const AddExpense = () => {
     };
     
 
-    if (!isLoggedIn) {
-        return <h3 className="text-center mt-5">Please log in to add expenses.</h3>;
-    }
+    // if (!isLoggedIn) {
+    //     return <h3 className="text-center mt-5">Please log in to add expenses.</h3>;
+    // }
 
     return (
         <>
@@ -216,7 +222,7 @@ const AddExpense = () => {
 </Button>
                 </div>
 
-                {expenses.length > 0 && <ExpenseList expenses={expenses} onEditExpense={editExpenseHandler} onDeleteExpense={deleteExpenseHandler} />}
+                <ExpenseList expenses={expenseItem} onEditExpense={editExpenseHandler} onDeleteExpense={deleteExpenseHandler} />
             </div>
         </>
     );

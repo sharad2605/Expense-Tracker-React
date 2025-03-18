@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import AuthContext from "../../store/auth-context";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../store/authSlice";
+// import { updateProfile } from "../store/authSlice";
 
 
 const Profile = () => {
@@ -8,7 +11,13 @@ const Profile = () => {
   const [photoUrl, setPhotoUrl] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
-  const { token } = useContext(AuthContext);
+  const token = useSelector((state) => state.auth.token);
+  const dispatch = useDispatch();
+
+  console.log("Token being used:", token);
+console.log("Token from localStorage:", localStorage.getItem("token"));
+
+
 
   const verifyEmailHandler = async() => {
     try{
@@ -24,10 +33,10 @@ const Profile = () => {
         },
       }
     )
-    if (!response.ok) {
+    if (!res.ok) {
       throw new Error('request failed');
   }
-  const data = await response.json();
+  const data = await res.json();
   console.log(data);
   alert('Code sent on email kindly check');
   return data
@@ -60,7 +69,7 @@ const Profile = () => {
         
 
         const data = await response.json();
-        if (data.users.length > 0) {
+        if ( data.users && data.users.length > 0) {
           setFullName(data.users[0].displayName || "");
           setPhotoUrl(data.users[0].photoUrl || "");
           setEmail(data.users[0].email || "");
@@ -107,7 +116,7 @@ const Profile = () => {
       if (data.error) {
         throw new Error(data.error.message);
       }
-
+      dispatch(authActions.updateProfile({ fullName, photoUrl }));
       alert("Profile updated successfully!");
     } catch (err) {
       alert(err.message);
